@@ -1,8 +1,13 @@
-//Create function getComputerChoice which will randomly return 'Rock', 'Paper', or 'Scissors.'
+//Declare the 3 possible choices as a constant
+const choices = ["Rock", "Paper", "Scissors"]
 
+//Create function getComputerChoice which will randomly return 'Rock', 'Paper', or 'Scissors.'
 //Put 'Rock', 'Paper', and 'Scissors' into an array
 //Get a random number (between 0 and 1? If so, mult by 3).
-
+function getComputerChoice(){
+   let computerSelection = choices[Math.floor(Math.random() * 3)];
+    return(computerSelection);
+}
 //Temp Test: Print the result
 
 //Create function that takes the playerSelection parameter (case-insensitive) and computerSelection parameter, 
