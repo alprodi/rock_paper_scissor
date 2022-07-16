@@ -11,9 +11,42 @@ function getComputerChoice(){
 function getPlayerChoice(){
     let playerSelection = prompt("Rock, Paper, or Scissors?").toUpperCase();
     let computerSelection = getComputerChoice();
-    console.log(computerSelection + " is the computer selection");
+    //Return result via a string that declares the winner.
+    //Check if it's a tie
+    if (playerSelection == computerSelection){
+        console.log("You picked " + playerSelection + ", and the computer picked " + computerSelection + ".");
+        console.log("It's a tie!")
+    }
+    //Check if player wins
+    else if( 
+        playerSelection == "ROCK" && computerSelection == "SCISSORS" ||
+        playerSelection == "PAPER" && computerSelection == "ROCK" ||
+        playerSelection == "SCISSORS" && computerSelection == "PAPER")
+            {
+            console.log("You picked " + playerSelection + ", and the computer picked " + computerSelection + ".");
+            console.log("You won! How rare.");
+            }
+    //Check if computer wins
+    else if( 
+        playerSelection == "ROCK" && computerSelection == "PAPER" ||
+        playerSelection == "PAPER" && computerSelection == "SCISSORS" ||
+        playerSelection == "SCISSORS" && computerSelection == "ROCK")
+            {
+            console.log("You picked " + playerSelection + ", and the computer picked " + computerSelection + ".");
+            console.log("You lost!");
+            }
+    //Check if the player didn't put in a valid choice
+    else if(
+        playerSelection != "ROCK" && 
+        playerSelection != "SCISSORS" &&
+        playerSelection != "PAPER")
+            {
+             console.log("You picked " + playerSelection + ", and the computer picked " + computerSelection + ".");
+            console.log("You didn't input either Rock, Paper, or Scissors. Try again");
+            }
+    //Catch all other weird errors. This shouldn't be possible?!
+    else{console.log("Something went terribly wrong to get this message.")};
 }
-//Return result via a string that declares the winner.
 
 
 //After the above works:
