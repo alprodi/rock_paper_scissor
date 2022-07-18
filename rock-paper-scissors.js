@@ -3,6 +3,8 @@ const choices = ["ROCK", "PAPER", "SCISSORS"]
 //Set default scores to 0.
 let computerScore = 0;
 let playerScore = 0;
+//number of rounds to play
+let numRounds = 5;
 //Create function getComputerChoice which will 
 //randomly return 'Rock', 'Paper', or 'Scissors.'
 //Put 'Rock', 'Paper', and 'Scissors' into an array
@@ -10,17 +12,13 @@ let playerScore = 0;
 function getComputerChoice(){
     return(choices[Math.floor(Math.random() * 3)]);
 }
-//Create function that takes the playerSelection parameter (case-insensitive)
-// and computerSelection parameter, 
-function playRound(){
-    let playerSelection = prompt("Rock, Paper, or Scissors?").toUpperCase();
-    let computerSelection = getComputerChoice();
-    //Return result via a string that declares the winner.
-    //Check if it's a tie
+function playRound(playerSelection){
+   let computerSelection = getComputerChoice();
+   //Check if it's a tie
     if (playerSelection == computerSelection){
-        console.log("You picked " + playerSelection +
+        roundResults.textContent = ("You picked " + playerSelection +
                 ", and the computer picked " + computerSelection + ".");
-        console.log("It's a tie!")
+        roundResultsFollowup.textContent = ("It's a tie!")
     }
     //Check if player wins
     else if( 
@@ -28,10 +26,11 @@ function playRound(){
         playerSelection == "PAPER" && computerSelection == "ROCK" ||
         playerSelection == "SCISSORS" && computerSelection == "PAPER")
             {
-            console.log("You picked " + playerSelection +
+            roundResults.textContent = ("You picked " + playerSelection +
                     ", and the computer picked " + computerSelection + ".");
-            console.log("You won! How rare.");
-            console.log(playerScore++);
+            roundResultsFollowup.textContent =("You won! How rare.");
+            playerScore++;
+            checkScore();
             }
     //Check if computer wins
     else if( 
@@ -39,50 +38,113 @@ function playRound(){
         playerSelection == "PAPER" && computerSelection == "SCISSORS" ||
         playerSelection == "SCISSORS" && computerSelection == "ROCK")
             {
-            console.log("You picked " + playerSelection +
+            roundResults.textContent = ("You picked " + playerSelection +
                     ", and the computer picked " + computerSelection + ".");
-            console.log("You lost!");
-            console.log(computerScore++);
+            roundResultsFollowup.textContent =("You lost!");
+            computerScore++;
+            checkScore();
             }
-    //Check if the player didn't put in a valid choice
-    else if(
-        playerSelection != "ROCK" && 
-        playerSelection != "SCISSORS" &&
-        playerSelection != "PAPER")
-            {
-            console.log("You picked " + playerSelection +
-                    ", and the computer picked " + computerSelection + ".");
-            console.log("You didn't input either Rock, Paper, or Scissors. Try again");
-            }
-    //Catch all other weird errors. This shouldn't be possible?!
-    else{console.log("Something went terribly wrong to get this message.")};
-    console.log ("The current score is PLAYER: " + playerScore +
-            ". COMPUTER: " + computerScore + ".");
+
 }
 
-//Play the game
-function game(){
+//function to check the socre
+function checkScore(){
+    if(playerScore + computerScore == numRounds){
+        endGame();
+    }
+        //if the game isn't over, then display the CURRENT score
+    else{scoreCounter.textContent = ("The current score is PLAYER: " + playerScore +
+            ". COMPUTER: " + computerScore + ".");
+    }
+}
+
+//when the game ends, calculate the final score
+//and display a replay button
+function endGame(){
+    //make buttons disappear
+    roundButtons[0].style.display = 'none';
+    roundButtons[1].style.display = 'none';
+    roundButtons[2].style.display = 'none';
+    //display restart button
+    playAgain.style.display = 'inline';
+    welcomeMessage.textContent = "";
+    //display final score bolded
+    scoreCounter.style.fontWeight = "900";
+    roundResultsFollowup.style.fontWeight = "900";
+    scoreCounter.textContent =("The final score is Player: " + playerScore +
+            ". Computer: " + computerScore + ".");
+    if (playerScore > computerScore){
+        roundResultsFollowup.textContent =("You won the game!");}
+    else if (playerScore < computerScore){
+        roundResultsFollowup.textContent =("You lost the game!");}
+    else if (playerScore == computerScore){
+        roundResultsFollowup.textContent =("It's a tie!");}
+    else {roundResultsFollowup.textContent =("This is an error message. Something went wrong, what did you do?")}  
+}
+
+//Restart the game
+function restartGame(){
     //Reset scores
     playerScore = 0;
     computerScore = 0;
-    while ((playerScore + computerScore) <5) {
-        playRound();
-    }
-//Calculate final score
-    console.log("The final score is Player: " + playerScore +
-            ". Computer: " + computerScore + ".");
-    if (playerScore > computerScore){
-        console.log("You won!");}
-    else if (playerScore < computerScore){
-        console.log("You lost!");}
-    else if (playerScore == computerScore){
-        console.log("It's a tie!");}
-    else {console.log("This is an error message. Something went wrong, what did you do?")}
-   
+    roundButtons[0].style.display = 'inline';
+    roundButtons[1].style.display = 'inline';
+    roundButtons[2].style.display = 'inline';
+    playAgain.style.display = 'none';
+    //restart messsages to defaults
+    scoreCounter.style.fontWeight = "normal";
+    roundResultsFollowup.style.fontWeight = "normal";
+    welcomeMessage.textContent = "Choose Your Selection";
+    roundResults.textContent = "";
+    roundResultsFollowup.textContent = "";
+    scoreCounter.textContent = "";
+
 }
-    
-game();
 
+//UI Area
+const buttons = document.querySelectorAll('button');
+const roundButtons = document.getElementsByClassName('roundButtons');
 
-//After the above works:
-//Write a new function called game(), calling the playRound function inside to play a 5 round game that keeps score and reports a winner or loser at the end.
+// we use the .forEach method to iterate through each button
+buttons.forEach((button) => {
+
+  // and for each one we add a 'click' listener
+  button.addEventListener('click', () => {
+    //alert(button.id);
+    playRound(button.id);
+  });
+});
+
+const gameMessage = document.querySelector('#gameMessage');
+
+let welcomeMessage = document.createElement('div');
+welcomeMessage.classList.add('gameInfo');
+welcomeMessage.textContent = "Choose Your Selection";
+gameMessage.appendChild(welcomeMessage);
+
+let roundResults = document.createElement('div');
+roundResults.classList.add('gameInfo');
+roundResults.textContent = "";
+gameMessage.appendChild(roundResults);
+
+let roundResultsFollowup = document.createElement('div');
+roundResultsFollowup.classList.add('gameInfo');
+roundResultsFollowup.textContent = "";
+gameMessage.appendChild(roundResultsFollowup);
+
+let  scoreCounter = document.createElement('div');
+scoreCounter.classList.add('gameInfo');
+scoreCounter.textContent = "";
+gameMessage.appendChild(scoreCounter);
+
+let playAgainContainer = document.createElement('div');
+playAgainContainer.setAttribute('class', 'gameInfo');
+
+let playAgain = document.createElement('button');
+playAgain.setAttribute('id', 'restart');
+playAgain.innerHTML = 'Play Again?';
+playAgain.onclick = function(){restartGame();}
+playAgain.style.display = 'none';
+playAgainContainer.appendChild(playAgain);
+
+gameMessage.appendChild(playAgainContainer);
