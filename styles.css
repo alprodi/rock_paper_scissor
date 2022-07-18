@@ -21,6 +21,7 @@ html {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px; 16px;
-    color:rgb(4, 5, 53)
+    padding: 16px;
+    color:rgb(4, 5, 53);
+
 }
